@@ -1,0 +1,152 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+
+class Book{
+    public:
+        void addBook(){
+            string name;
+            fstream myfile;
+            cout << "Name of the book : ";
+            cin >> name;
+            cout << "\nName of the author : ";
+            string authorName;
+            cin >> authorName;
+            cout << "\nNumber of copies";
+            string numberOfbooks;
+            cin >> numberOfbooks;
+            cout << endl;
+            myfile.open("database.txt",ios::app);
+            if(myfile){
+                myfile << name + "\n" + authorName + "\n" + numberOfbooks + "\n";
+                cout << "Successfully added " << numberOfbooks << " copies of " << name;
+                myfile.close();
+            }
+
+        }
+        void SearchBook(){
+            cout << "Name : ";
+            string name;
+            cin >> name;
+            cout << endl;
+            ifstream myfile("database.txt");
+            string a,b,c;
+            while(!myfile.eof()){
+                myfile >> a;
+                myfile >> b;
+                myfile >> c;
+                if(a==name) break;
+            }
+            if(a==name){
+                cout << "Found it!\n";
+                cout << " Name : " << a << "\n Author : " << b << "\n Stock : " << c << " copies available";
+            }else{
+                cout << "Sorry, this book is not available right now\n";
+            }
+            myfile.close();
+        }
+
+        void Modify(){
+            cout << "Wellcome to modifying mode/nName : ";
+            //cout << endl;
+            string name;
+            cin >> name;
+            ifstream myfile("database.txt");
+            ofstream myfile2("database2.txt");
+            int modMode = 1;
+            string a,b,c;
+            while(!myfile.eof()){
+                myfile >> a;
+                myfile >> b;
+                myfile >> c;
+                if(a==name) break;
+            }
+            if(a!=name){
+                cout << "\nCan't find the book\n";
+            }else{
+                while(modMode){
+                    cout << "What would you like to modify?\n";
+                    cout << "  1.Name     2.Author    3.Number of copies";
+                    cout << endl;
+                    int modifyN;
+                    string modifyS;
+                    cin >> modifyN;
+                    if(modifyN==1){
+                        cout << "New Name : \n";
+                        cin >> modifyS;
+                        a = modifyS;
+                        cout << endl;
+                    }else if(modifyN==2){
+                        cout << "New Author Name : \n";
+                        cin >> modifyS;
+                        b = modifyS;
+                        cout << endl;
+                    }else if(modifyN==3){
+                        cout << "Number of copies available : \n";
+                        cin >> modifyS;
+                        c = modifyS;
+                        cout << endl;
+                    }else{
+                        cout << "Sorry but you have to choose either 1 or 2 or 3, nothing else/n";
+                    }
+                    cout << "\nWould you like to...\n";
+                    cout << "0.Exit modifying mode  1.Keep modifying\n";
+                    cin >> modMode;
+
+                }
+            }
+            string e,f,g;
+            myfile.close();
+            myfile.open("database.txt");
+            while(!myfile.eof()){
+                myfile >> e;
+                myfile >> f;
+                myfile >> g;
+                if(e==name){
+                    myfile2 << a;
+                    myfile2 << endl;
+                    myfile2 << b;
+                    myfile2 << endl;
+                    myfile2 << c;
+                    myfile2 << endl;
+                }else{
+                    myfile2 << e;
+                    myfile2 << endl;
+                    myfile2 << f;
+                    myfile2 << endl;
+                    myfile2 << g;
+                    myfile2 << endl;
+                }
+            }
+            myfile.close();
+            myfile2.close();
+            remove("database.txt");
+            rename("database2.txt","database.txt");
+
+        }
+};
+
+int main(){
+    Book book;
+    string Mname = "Charles Dickenes Memorial";
+    cout << "<<<<<<<<<<<<<<<<<<<<<Wellcome to the " << Mname << " Bookshop Management System>>>>>>>>>>>>>>>>>>>>>>>>>";
+    cout << "\n\n\n  What would you like to do?";
+    cout << "\n 1.Add new book";
+    cout << "\n 2.Search for a book";
+    cout << "\n 3.Modify";
+    cout << endl;
+    int n;
+    cin >> n;
+    if(n==1){
+        book.addBook();
+    }else if(n==2){
+        book.SearchBook();
+    }else if (n==3)
+    {
+        book.Modify();
+    }
+
+    string end;
+    cin >> end;
+    return 0;
+}
